@@ -1,7 +1,6 @@
-### 1. Create a Story
 POST http://localhost:5000/api/stories
 Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
+user-id: 60c72b2f9d1d802d08f12345
 
 {
   "privacy": "public",
@@ -15,231 +14,21 @@ user-id: 60c72b2f9b1d8b2d88f12345
 
 ###
 
-### 2. View a Story
-# Replace NEW_STORY_ID in the URL below with the _id returned from Request #1
-POST http://localhost:5000/api/stories/story_1790436744628_0
-POST http://localhost:5000/api/stories
+POST http://localhost:5000/api/language/request-change
 Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
 
 {
-  "privacy": "public",
-  "media": [
-    {
-      "mediaUrl": "https://example.com/photo1.jpg",
-      "mediaType": "image"
-    }
-  ]
+  "userId": "user_123",
+  "language": "fr"
 }
 
 ###
 
-### 2. View a Story
-# Replace NEW_STORY_ID in the URL below with the _id returned from Request #1
-POST http://localhost:5000/api/stories/NEW_STORY_ID/view
+POST http://localhost:5000/api/language/verify-otp
 Content-Type: application/json
-user-id: 999999999999999999999999
-
-###
-
-### 3. React to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/react
-Content-Type: application/json
-user-id: 999999999999999999999999
 
 {
-  "emoji": "🔥"
+  "userId": "user_123",
+  "otp": "507547",
+  "newLanguage": "fr"
 }
-
-###
-
-### 4. Reply to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/reply
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "message": "This looks amazing!"
-}
-
-###
-
-### 5. Get Story Analytics
-# Replace NEW_STORY_ID in the URL below
-GET http://localhost:5000/api/stories/NEW_STORY_ID/analytics
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-###
-
-### 6. Delete a Story
-# Replace NEW_STORY_ID in the URL below
-DELETE http://localhost:5000/api/stories/### 1. Create a Story
-POST http://localhost:5000/api/stories
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-{
-  "privacy": "public",
-  "media": [
-    {
-      "mediaUrl": "https://example.com/photo1.jpg",
-      "mediaType": "image"
-    }
-  ]
-}
-
-###
-
-### 2. View a Story
-# Replace NEW_STORY_ID in the URL below with the _id returned from Request #1
-POST http://localhost:5000/api/stories/NEW_STORY_ID/view
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-###
-
-### 3. React to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/react
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "emoji": "🔥"
-}
-
-###
-
-### 4. Reply to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/reply
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "message": "This looks amazing!"
-}
-
-###
-
-### 5. Get Story Analytics
-# Replace NEW_STORY_ID in the URL below
-GET http://localhost:5000/api/stories/NEW_STORY_ID/analytics
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-###
-
-### 6. Delete a Story
-# Replace NEW_STORY_ID in the URL below
-DELETE http://localhost:5000/api/stories/NEW_STORY_ID
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-POST http://localhost:5000/api/stories
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-{
-  "privacy": "public",
-  "media": [
-    {
-      "mediaUrl": "https://example.com/photo1.jpg",
-      "mediaType": "image"
-    }
-  ]
-}
-
-###
-
-### 2. View a Story
-# Replace NEW_STORY_ID in the URL below with the _id returned from Request #1
-POST http://localhost:5000/api/stories/NEW_STORY_ID/view
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-###
-
-### 3. React to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/react
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "emoji": "🔥"
-}
-
-###
-
-### 4. Reply to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/reply
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "message": "This looks amazing!"
-}
-
-###
-
-### 5. Get Story Analytics
-# Replace NEW_STORY_ID in the URL below
-GET http://localhost:5000/api/stories/NEW_STORY_ID/analytics
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-###
-
-### 6. Delete a Story
-# Replace NEW_STORY_ID in the URL below
-DELETE http://localhost:5000/api/stories/NEW_STORY_ID
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345/view
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-###
-
-### 3. React to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/react
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "emoji": "🔥"
-}
-
-###
-
-### 4. Reply to a Story
-# Replace NEW_STORY_ID in the URL below
-POST http://localhost:5000/api/stories/NEW_STORY_ID/reply
-Content-Type: application/json
-user-id: 999999999999999999999999
-
-{
-  "message": "This looks amazing!"
-}
-
-###
-
-### 5. Get Story Analytics
-# Replace NEW_STORY_ID in the URL below
-GET http://localhost:5000/api/stories/NEW_STORY_ID/analytics
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345
-
-###
-
-### 6. Delete a Story
-# Replace NEW_STORY_ID in the URL below
-DELETE http://localhost:5000/api/stories/NEW_STORY_ID
-Content-Type: application/json
-user-id: 60c72b2f9b1d8b2d88f12345

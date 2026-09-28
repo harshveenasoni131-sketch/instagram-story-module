@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 470px;
+  min-height: 100vh;
+  background-color: #ffffff;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  height: 44px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.insta-logo-svg {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.icon-btn, .nav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.feed-divider {
+  height: 1px;
+  background-color: #efefef;
+  margin-top: 4px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 470px;
+  height: 50px;
+  background-color: #ffffff;
+  border-top: 1px solid #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.nav-profile-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+.insta-logo-image {
+  height: 28px;
+  width: auto;
+  display: block;
+}
