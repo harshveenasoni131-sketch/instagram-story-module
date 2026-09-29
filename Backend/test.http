@@ -1,19 +1,18 @@
+### 1. Test Create Story
 POST http://localhost:5000/api/stories
 Content-Type: application/json
-user-id: 60c72b2f9d1d802d08f12345
+user-id: user_123
 
 {
-  "privacy": "public",
-  "media": [
-    {
-      "mediaUrl": "https://example.com/photo1.jpg",
-      "mediaType": "image"
-    }
-  ]
+  "media": ["https://example.com/image.jpg"],
+  "privacy": "public"
 }
 
-###
+### 2. Test Get Stories
+GET http://localhost:5000/api/stories
+user-id: user_123
 
+### 3. Test Language OTP Request
 POST http://localhost:5000/api/language/request-change
 Content-Type: application/json
 
@@ -22,13 +21,10 @@ Content-Type: application/json
   "language": "fr"
 }
 
-###
-
-POST http://localhost:5000/api/language/verify-otp
+### 4. Test Subscription Upgrade
+POST http://localhost:5000/api/subscriptions/upgrade
 Content-Type: application/json
 
 {
-  "userId": "user_123",
-  "otp": "507547",
-  "newLanguage": "fr"
+  "userId": "user_123"
 }

@@ -1,0 +1,131 @@
+const Subscription = require('./Models/Subscription');
+
+// Automatically assign a Free plan when a user signs up
+exports.assignFreePlan = async (userId) => {
+  try {
+    const existingSub = await Subscription.findOne({ userId });
+    if (!existingSub) {
+      const newSubscription = new Subscription({
+        userId: userId,
+        planName: 'Free',
+        postLimit: 1,
+        postsUsed: 0,
+        status: 'active'
+      });
+      await newSubscription.save();
+    }
+  } catch (error) {
+    console.error("Error assigning free plan:", error.message);
+  }
+};
+const Subscription = require('./Models/Subscription');
+const nodemailer = require('nodemailer');
+
+// Configure your email transporter (using Gmail or a test service like Ethereal)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'your-email@gmail.com',       // Replace with your email
+    pass: 'your-email-app-password'     // Replace with your Gmail App Password
+  }
+});
+
+// Automatically assign a Free plan when a user signs up
+exports.assignFreePlan = async (userId) => {
+  try {
+    const existingSub = await Subscription.findOne({ userId });
+    if (!existingSub) {
+      const newSubscription = new Subscription({
+        userId: userId,
+        planName: 'Free',
+        postLimit: 1,
+        postsUsed: 0,
+        status: 'active'
+      });
+      await newSubscription.save();
+    }
+  } catch (error) {
+    console.error("Error assigning free plan:", error.message);
+  }
+};
+
+// Handle Plan Upgrade, Payment, and Invoice Email
+exports.upgradeSubscription = async (req, res) => {
+  try {
+    const { userId, userEmail, planName } = req.body; 
+    
+    let postLimit = 1;
+    let amountPaid = 0;
+
+    if (planName === 'Bronze') { postLimit = 3; amountPaid = 100; }
+    else if (planName === 'Silver') { postLimit = 5; amountPaid = 300; }
+    else if (planName === 'Gold') { postLimit = -1; amountPaid = 1000; } // -1 means unlimited
+    else {
+      return res.status(400).json({ success: false, message: "Invalid plan selected." });
+    }
+
+    const startDate = new Date();
+    const renewalDate = new Date();
+    renewalDate.setMonth(renewalDate.getMonth() + 1); // 1 month validity
+
+    let subscription = await Subscription.findOne({ userId });
+    
+    if (subscription) {
+      subscription.planName = planName;
+      subscription.postLimit = postLimit;
+      subscription.postsUsed = 0; 
+      subscription.status = 'active';
+      subscription.startDate = startDate;
+      subscription.renewalDate = renewalDate;
+      subscription.amountPaid = amountPaid;
+      await subscription.save();
+    } else {
+      subscription = new Subscription({
+        userId,
+        planName,
+        postLimit,
+        postsUsed: 0,
+        status: 'active',
+        startDate,
+        renewalDate,
+        amountPaid
+      });
+      await subscription.save();
+    }
+
+    // Send Email Invoice
+    const mailOptions = {
+      from: 'your-email@gmail.com',
+      to: userEmail,
+      subject: `Payment Invoice - ${planName} Plan Subscription`,
+      html: `
+        <h2>Thank you for your subscription!</h2>
+        <p>Your payment of <strong>₹${amountPaid}</strong> was successful.</p>
+        <h3>Subscription Details:</h3>
+        <ul>
+          <li><strong>Plan:</strong> ${planName}</li>
+          <li><strong>Post Limit:</strong> ${postLimit === -1 ? 'Unlimited' : postLimit} posts</li>
+          <li><strong>Start Date:</strong> ${startDate.toDateString()}</li>
+          <li><strong>Next Renewal Date:</strong> ${renewalDate.toDateString()}</li>
+        </ul>
+        <p>Enjoy posting on your platform!</p>
+      `
+    };
+
+    // Send the email (wrapped in try/catch so it doesn't block the response if email config fails)
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError.message);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully upgraded to ${planName} plan and invoice sent!`,
+      subscription
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
