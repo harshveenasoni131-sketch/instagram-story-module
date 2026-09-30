@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { upgradeSubscription } = require('./SubscriptionController');
-const { checkPaymentWindow } = require('./middleware/PaymentWindow');
+const { upgradeSubscription, checkPaymentWindow } = require('./SubscriptionController');
 
 router.post('/upgrade', checkPaymentWindow, upgradeSubscription);
 

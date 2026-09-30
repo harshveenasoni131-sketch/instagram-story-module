@@ -3,6 +3,7 @@ import { Plus, Heart, Home, Clapperboard, Send, Search } from 'lucide-react';
 import StoryTray from './components/StoryTray';
 import StoryViewer from './components/StoryViewer';
 import LanguageSettings from './components/LanguageSettings';
+import SubscriptionDashboard from './SubscriptionDashboard';
 import './App.css';
 
 function App() {
@@ -36,7 +37,12 @@ function App() {
 
         <div className="feed-divider"></div>
 
-        {/* Language Settings Component for Task 2 */}
+        {/* Subscription Dashboard Component */}
+        <section className="subscription-section" style={{ margin: '20px 0' }}>
+          <SubscriptionDashboard />
+        </section>
+
+        {/* Language Settings Component */}
         <section className="settings-section" style={{ margin: '20px 0' }}>
           <LanguageSettings />
         </section>
