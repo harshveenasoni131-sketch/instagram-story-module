@@ -1,0 +1,50 @@
+### 1. Test Microsoft Edge Login (Direct Success Access)
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.2210.91
+
+{
+  "email": "harshveena@example.com",
+  "password": "password123"
+}
+
+### ---
+
+### 2. Test Google Chrome Login (Triggers OTP Requirement)
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+
+{
+  "email": "harshveena@example.com",
+  "password": "password123"
+}
+
+### ---
+
+### 3. Verify Chrome OTP (Check your server terminal for the printed 6-digit code)
+POST http://localhost:5000/api/auth/verify-chrome-otp
+Content-Type: application/json
+
+{
+  "userId": "user_123",
+  "otp": "123456"
+}
+
+### ---
+
+### 4. Test Mobile Login (Time Restricted: Only allowed between 10:00 AM – 1:00 PM)
+# Note: Since it is currently past 1:00 PM, this should correctly block access!
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148
+
+{
+  "email": "harshveena@example.com",
+  "password": "password123"
+}
+
+### ---
+
+### 5. Fetch User Login History (Audit Log Review)
+GET http://localhost:5000/api/user/login-history/user_123

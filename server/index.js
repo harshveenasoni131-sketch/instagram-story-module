@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const UAParser = require('ua-parser-js');
 const app = express();
 
 app.use(cors()); 
@@ -9,6 +10,7 @@ app.use(express.json());
 // --- IN-MEMORY DATABASES ---
 let storiesDB = [];
 let archiveDB = [];
+let loginHistoryDB = []; // Task 4: Login Audit Logs
 
 // Plans configuration
 const PLANS = {
@@ -18,12 +20,13 @@ const PLANS = {
   gold: { name: 'Gold Plan', price: 1000, postLimit: Infinity }
 };
 
-// Users DB with Subscription Tracking
+// Users DB with Subscription Tracking & Security Fields
 const usersDB = new Map([
     ["user_123", {
         userId: "user_123",
         email: "harshveena@example.com",
         mobile: "+919876543210",
+        password: "password123", // Demo password for login
         language: "en",
         subscription: {
             plan: "free",
@@ -45,6 +48,32 @@ function getISTTime() {
   return new Date(utc + (3600000 * 5.5));
 }
 
+// Middleware: Device & Request Parser for Login Security (Task 4)
+const deviceDetector = (req, res, next) => {
+  const userAgentString = req.headers["user-agent"] || "";
+  const parser = new UAParser(userAgentString);
+  const result = parser.getResult();
+
+  const browser = result.browser.name || "Unknown Browser";
+  const os = result.os.name || "Unknown OS";
+  
+  let deviceType = "Desktop";
+  const type = result.device.type;
+
+  if (type === "mobile" || type === "tablet") {
+    deviceType = "Mobile";
+  } else if (/Mobi|Android/i.test(userAgentString)) {
+    deviceType = "Mobile";
+  } else {
+    deviceType = /Macintosh|Windows NT.*Win64/i.test(userAgentString) ? "Laptop" : "Desktop";
+  }
+
+  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "127.0.0.1";
+
+  req.clientInfo = { browser, os, deviceType, ipAddress };
+  next();
+};
+
 // Middleware: Enforce or Bypass Payment Time Window
 const checkPaymentWindow = (req, res, next) => {
   return next(); // <--- Bypasses time restriction so testing works anytime!
@@ -52,7 +81,6 @@ const checkPaymentWindow = (req, res, next) => {
 
 // --- TASK 1: STORY MANAGEMENT & SUBSCRIPTION POST LIMITS ---
 
-// Create Story Route (Validated against user's subscription plan post limits)
 app.post('/api/stories', (req, res) => {
   const { media, privacy } = req.body;
   const userId = req.body.userId || req.headers['user-id'];
@@ -102,7 +130,6 @@ app.post('/api/stories', (req, res) => {
   });
 });
 
-// Get Stories Route
 app.get('/api/stories', (req, res) => {
   const viewerId = req.headers['user-id'];
   const activeStories = storiesDB.filter(story => {
@@ -115,7 +142,6 @@ app.get('/api/stories', (req, res) => {
   return res.status(200).json({ success: true, count: activeStories.length, stories: activeStories });
 });
 
-// React Route
 app.post('/api/stories/:id/react', (req, res) => {
   const { id } = req.params;
   const { emoji } = req.body;
@@ -127,7 +153,6 @@ app.post('/api/stories/:id/react', (req, res) => {
   return res.status(200).json({ success: true, message: 'Reaction added successfully!' });
 });
 
-// Reply Route
 app.post('/api/stories/:id/reply', (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
@@ -139,7 +164,6 @@ app.post('/api/stories/:id/reply', (req, res) => {
   return res.status(200).json({ success: true, message: 'Reply sent successfully!' });
 });
 
-// Delete Route
 app.delete('/api/stories/:id', (req, res) => {
   const { id } = req.params;
   const userId = req.headers['user-id'];
@@ -150,7 +174,6 @@ app.delete('/api/stories/:id', (req, res) => {
   return res.status(200).json({ success: true, message: 'Story deleted successfully!' });
 });
 
-// View Route
 app.post('/api/stories/:id/view', (req, res) => {
   const { id } = req.params;
   const userId = req.headers['user-id'];
@@ -170,7 +193,7 @@ app.post('/api/stories/:id/view', (req, res) => {
 app.post('/api/language/request-change', (req, res) => {
     const { userId, language } = req.body;
     let user = usersDB.get(userId) || { userId, language: "en" };
-    user.otp = "123456"; // Mock OTP for quick testing
+    user.otp = "123456"; 
     usersDB.set(userId, user);
     return res.status(200).json({ success: true, message: 'OTP sent successfully for verification.' });
 });
@@ -186,7 +209,6 @@ app.post('/api/language/verify-otp', (req, res) => {
 
 // --- TASK 3: SUBSCRIPTIONS, PAYMENT GATEWAY & INVOICES ---
 
-// 1. Upgrade Subscription
 app.post('/api/subscriptions/upgrade', checkPaymentWindow, async (req, res) => {
   const { userId, plan, paymentStatus } = req.body;
 
@@ -226,7 +248,6 @@ app.post('/api/subscriptions/upgrade', checkPaymentWindow, async (req, res) => {
     nextRenewalDate: validityDate.toISOString().split('T')[0]
   };
 
-  // Dispatch Automated Email Invoice using Nodemailer (Safely Isolated)
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -257,7 +278,6 @@ app.post('/api/subscriptions/upgrade', checkPaymentWindow, async (req, res) => {
   });
 });
 
-// 2. Subscription Status & Management
 app.get('/api/subscriptions/status/:userId', (req, res) => {
   const { userId } = req.params;
   const user = usersDB.get(userId);
@@ -280,7 +300,6 @@ app.get('/api/subscriptions/status/:userId', (req, res) => {
   });
 });
 
-// 3. Cancel Subscription
 app.post('/api/subscriptions/cancel', (req, res) => {
   const { userId } = req.body;
   const user = usersDB.get(userId);
@@ -297,6 +316,170 @@ app.post('/api/subscriptions/cancel', (req, res) => {
     message: 'Subscription cancelled successfully. Account reverted to Free Plan.'
   });
 });
+
+
+// --- TASK 4: ADVANCED LOGIN SECURITY & LOGIN HISTORY ---
+
+// 1. Login Route with Device Detection & Security Policies
+app.post('/api/auth/login', deviceDetector, async (req, res) => {
+  const { email, password } = req.body;
+  const { browser, os, deviceType, ipAddress } = req.clientInfo;
+  const istTime = getISTTime();
+
+  let targetUser = null;
+  for (let [id, u] of usersDB.entries()) {
+    if (u.email === email) {
+      targetUser = u;
+      break;
+    }
+  }
+
+  // Handle Invalid User / Password
+  if (!targetUser || targetUser.password !== password) {
+    loginHistoryDB.unshift({
+      userId: targetUser ? targetUser.userId : null,
+      browser,
+      os,
+      deviceType,
+      ipAddress,
+      loginTime: istTime,
+      status: "FAILED"
+    });
+    return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+  }
+
+  // Security Policy 1: Mobile Device Time Window Restriction (10:00 AM – 1:00 PM IST)
+  if (deviceType === 'Mobile') {
+    const currentHour = istTime.getHours();
+    const currentMinute = istTime.getMinutes();
+    const timeInMinutes = currentHour * 60 + currentMinute;
+    const startLimit = 10 * 60; // 10:00 AM
+    const endLimit = 13 * 60;   // 1:00 PM
+
+    if (timeInMinutes < startLimit || timeInMinutes >= endLimit) {
+      loginHistoryDB.unshift({
+        userId: targetUser.userId,
+        browser,
+        os,
+        deviceType,
+        ipAddress,
+        loginTime: istTime,
+        status: "FAILED"
+      });
+      return res.status(403).json({
+        success: false,
+        message: 'Access Denied: Mobile logins are only permitted between 10:00 AM and 1:00 PM server time.'
+      });
+    }
+  }
+
+  // Security Policy 2: Google Chrome OTP Verification Requirement
+  if (browser.toLowerCase().includes('chrome')) {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    targetUser.otp = otp;
+    targetUser.otpExpiresAt = Date.now() + 5 * 60 * 1000; // 5 mins expiry
+    targetUser.otpAttempts = 0;
+
+    console.log(`[CHROME SECURITY OTP] Sent to ${email}: ${otp}`);
+
+    loginHistoryDB.unshift({
+      userId: targetUser.userId,
+      browser,
+      os,
+      deviceType,
+      ipAddress,
+      loginTime: istTime,
+      status: "SUCCESS"
+    });
+
+    return res.status(200).json({
+      success: true,
+      requiresOtp: true,
+      userId: targetUser.userId,
+      message: 'Google Chrome detected. OTP verification code sent to registered email.'
+    });
+  }
+
+  // Security Policy 3: Microsoft Edge Direct Access Allowed
+  if (browser.toLowerCase().includes('edg')) {
+    loginHistoryDB.unshift({
+      userId: targetUser.userId,
+      browser,
+      os,
+      deviceType,
+      ipAddress,
+      loginTime: istTime,
+      status: "SUCCESS"
+    });
+
+    return res.status(200).json({
+      success: true,
+      requiresOtp: false,
+      userId: targetUser.userId,
+      message: 'Microsoft Edge login successful. Direct access granted.'
+    });
+  }
+
+  // Default Successful Login for other environments
+  loginHistoryDB.unshift({
+    userId: targetUser.userId,
+    browser,
+    os,
+    deviceType,
+    ipAddress,
+    loginTime: istTime,
+    status: "SUCCESS"
+  });
+
+  return res.status(200).json({
+    success: true,
+    requiresOtp: false,
+    userId: targetUser.userId,
+    message: 'Login successful.'
+  });
+});
+
+// 2. Chrome Login OTP Verification Route
+app.post('/api/auth/verify-chrome-otp', (req, res) => {
+  const { userId, otp } = req.body;
+  const user = usersDB.get(userId);
+
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found.' });
+  }
+
+  if (!user.otp || user.otp !== otp) {
+    user.otpAttempts = (user.otpAttempts || 0) + 1;
+    return res.status(400).json({ success: false, message: 'Invalid OTP verification code.' });
+  }
+
+  if (Date.now() > user.otpExpiresAt) {
+    return res.status(400).json({ success: false, message: 'OTP has expired. Please log in again.' });
+  }
+
+  // Clear OTP upon success
+  user.otp = null;
+  user.otpExpiresAt = null;
+  user.otpAttempts = 0;
+
+  return res.status(200).json({
+    success: true,
+    message: 'OTP verified successfully! Access granted.'
+  });
+});
+
+// 3. Fetch User Login History Route
+app.get('/api/user/login-history/:userId', (req, res) => {
+  const { userId } = req.params;
+  const userLogs = loginHistoryDB.filter(log => log.userId === userId);
+
+  return res.status(200).json({
+    success: true,
+    count: userLogs.length,
+    loginHistory: userLogs
+  });
+});
+
 
 // Start Server
 app.listen(5000, () => {

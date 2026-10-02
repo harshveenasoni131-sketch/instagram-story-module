@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Heart, Home, Clapperboard, Send, Search } from 'lucide-react';
-import StoryTray from './StoryTray';
-import StoryViewer from './StoryViewer';
-import LanguageSettings from './LanguageSettings';
-import SubscriptionDashboard from './SubscriptionDashboard';
+import StoryTray from "./components/StoryTray";
+import StoryViewer from "./components/StoryViewer";
+import LanguageSettings from "./components/LanguageSettings";
+import SubscriptionDashboard from "./components/SubscriptionDashboard";
 import './App.css';
 
 function App() {
