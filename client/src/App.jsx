@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Plus, Heart, Home, Clapperboard, Send, Search } from 'lucide-react';
+import { Plus, Heart, Home, Clapperboard, Send, Search, ShieldCheck } from 'lucide-react';
 import StoryTray from "./components/StoryTray";
 import StoryViewer from "./components/StoryViewer";
 import LanguageSettings from "./components/LanguageSettings";
 import SubscriptionDashboard from "./components/SubscriptionDashboard";
+import LoginScreen from "./components/LoginScreen"; // Added Login Security Module
 import './App.css';
 
 function App() {
   const [activeStory, setActiveStory] = useState(null);
+  const [currentView, setCurrentView] = useState('feed'); // 'feed' or 'security'
 
   return (
     <div className="app-container">
@@ -24,40 +26,62 @@ function App() {
           className="insta-logo-image" 
         />
 
-        <button className="icon-btn" aria-label="Notifications">
-          <Heart size={26} strokeWidth={1.8} color="#000000" />
+        <button 
+          className="icon-btn" 
+          aria-label="Security Portal"
+          onClick={() => setCurrentView(currentView === 'feed' ? 'security' : 'feed')}
+          title="Toggle Security Portal"
+        >
+          <ShieldCheck size={26} strokeWidth={1.8} color={currentView === 'security' ? '#4f46e5' : '#000000'} />
         </button>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content Area: Switch between Feed and Security Portal */}
       <main className="main-content">
-        <section className="stories-section">
-          <StoryTray onSelectStory={(story) => setActiveStory(story)} />
-        </section>
+        {currentView === 'feed' ? (
+          <>
+            <section className="stories-section">
+              <StoryTray onSelectStory={(story) => setActiveStory(story)} />
+            </section>
 
-        <div className="feed-divider"></div>
+            <div className="feed-divider"></div>
 
-        {/* Subscription Dashboard Component */}
-        <section className="subscription-section" style={{ margin: '20px 0' }}>
-          <SubscriptionDashboard />
-        </section>
+            {/* Subscription Dashboard Component */}
+            <section className="subscription-section" style={{ margin: '20px 0' }}>
+              <SubscriptionDashboard />
+            </section>
 
-        {/* Language Settings Component */}
-        <section className="settings-section" style={{ margin: '20px 0' }}>
-          <LanguageSettings />
-        </section>
+            {/* Language Settings Component */}
+            <section className="settings-section" style={{ margin: '20px 0' }}>
+              <LanguageSettings />
+            </section>
+          </>
+        ) : (
+          <section className="security-section" style={{ paddingBottom: '70px' }}>
+            <LoginScreen />
+          </section>
+        )}
       </main>
 
       {/* Bottom Navigation */}
       <nav className="bottom-nav">
-        <button className="nav-btn"><Home size={26} color="#000000" strokeWidth={2.2} /></button>
+        <button 
+          className={`nav-btn ${currentView === 'feed' ? 'active' : ''}`}
+          onClick={() => setCurrentView('feed')}
+        >
+          <Home size={26} color="#000000" strokeWidth={2.2} />
+        </button>
         <button className="nav-btn"><Clapperboard size={24} color="#000000" strokeWidth={1.8} /></button>
         <button className="nav-btn"><Send size={24} color="#000000" strokeWidth={1.8} /></button>
         <button className="nav-btn"><Search size={26} color="#000000" strokeWidth={2} /></button>
-        <button className="nav-btn profile-nav-btn">
+        <button 
+          className={`nav-btn profile-nav-btn ${currentView === 'security' ? 'ring-2 ring-indigo-600 rounded-full' : ''}`}
+          onClick={() => setCurrentView('security')}
+          title="Open Security & Login History"
+        >
           <img 
             src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-            alt="Profile" 
+            alt="Profile & Security" 
             className="nav-profile-img" 
           />
         </button>
