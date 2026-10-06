@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Plus, Heart, Home, Clapperboard, Send, Search, ShieldCheck } from 'lucide-react';
+import { Plus, Heart, Home, Clapperboard, Send, Search, ShieldCheck, ShieldAlert } from 'lucide-react';
 import StoryTray from "./components/StoryTray";
 import StoryViewer from "./components/StoryViewer";
 import LanguageSettings from "./components/LanguageSettings";
 import SubscriptionDashboard from "./components/SubscriptionDashboard";
 import LoginScreen from "./components/LoginScreen"; // Added Login Security Module
+import AdminDashboard from "./components/AdminDashboard"; // Added Admin Dashboard
 import './App.css';
 
 function App() {
   const [activeStory, setActiveStory] = useState(null);
-  const [currentView, setCurrentView] = useState('feed'); // 'feed' or 'security'
+  const [currentView, setCurrentView] = useState('feed'); // 'feed', 'security', or 'admin'
+  const adminId = 'admin_001'; // Pre-configured admin ID for testing the dashboard
 
   return (
     <div className="app-container">
@@ -26,19 +28,32 @@ function App() {
           className="insta-logo-image" 
         />
 
-        <button 
-          className="icon-btn" 
-          aria-label="Security Portal"
-          onClick={() => setCurrentView(currentView === 'feed' ? 'security' : 'feed')}
-          title="Toggle Security Portal"
-        >
-          <ShieldCheck size={26} strokeWidth={1.8} color={currentView === 'security' ? '#4f46e5' : '#000000'} />
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {/* Admin Control Panel Toggle Button */}
+          <button 
+            className="icon-btn" 
+            aria-label="Admin Dashboard"
+            onClick={() => setCurrentView(currentView === 'admin' ? 'feed' : 'admin')}
+            title="Toggle Admin Control Panel"
+          >
+            <ShieldAlert size={26} strokeWidth={1.8} color={currentView === 'admin' ? '#ff4d4f' : '#000000'} />
+          </button>
+
+          {/* Security Portal Toggle Button */}
+          <button 
+            className="icon-btn" 
+            aria-label="Security Portal"
+            onClick={() => setCurrentView(currentView === 'security' ? 'feed' : 'security')}
+            title="Toggle Security Portal"
+          >
+            <ShieldCheck size={26} strokeWidth={1.8} color={currentView === 'security' ? '#4f46e5' : '#000000'} />
+          </button>
+        </div>
       </header>
 
-      {/* Main Content Area: Switch between Feed and Security Portal */}
+      {/* Main Content Area: Switch between Feed, Security Portal, and Admin Dashboard */}
       <main className="main-content">
-        {currentView === 'feed' ? (
+        {currentView === 'feed' && (
           <>
             <section className="stories-section">
               <StoryTray onSelectStory={(story) => setActiveStory(story)} />
@@ -56,9 +71,17 @@ function App() {
               <LanguageSettings />
             </section>
           </>
-        ) : (
+        )}
+
+        {currentView === 'security' && (
           <section className="security-section" style={{ paddingBottom: '70px' }}>
             <LoginScreen />
+          </section>
+        )}
+
+        {currentView === 'admin' && (
+          <section className="admin-section" style={{ paddingBottom: '70px' }}>
+            <AdminDashboard adminId={adminId} onLogout={() => setCurrentView('feed')} />
           </section>
         )}
       </main>
