@@ -1,5 +1,7 @@
-import React from 'react';
-import { Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Clock } from 'lucide-react';
+import CreateStory from './CreateStory';
+import ScheduledPostsModal from "./ScheduledPostModal";
 import './StoryTray.css';
 
 const storiesData = [
@@ -31,32 +33,88 @@ const storiesData = [
   },
 ];
 
-function StoryTray({ onSelectStory }) {
+function StoryTray({ onSelectStory, userId = 'user_123' }) {
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showScheduledModal, setShowScheduledModal] = useState(false);
+
+  const handleStoryClick = (item) => {
+    if (item.isUser) {
+      // Open Create / Schedule Story modal when clicking 'Your story'
+      setShowCreateModal(true);
+    } else if (onSelectStory) {
+      onSelectStory(item);
+    }
+  };
+
   return (
-    <div className="story-tray-container">
-      {storiesData.map((item) => (
+    <div className="story-tray-wrapper">
+      {/* Story Tray List */}
+      <div className="story-tray-container">
+        {storiesData.map((item) => (
+          <div 
+            key={item.id} 
+            className="story-item"
+            onClick={() => handleStoryClick(item)}
+          >
+            {item.isUser ? (
+              <div className="your-story-container">
+                <img src={item.avatar} alt="Your story" className="story-avatar-img" />
+                <div className="add-plus-badge">
+                  <Plus size={12} color="#ffffff" strokeWidth={3} />
+                </div>
+              </div>
+            ) : (
+              <div className="insta-gradient-ring">
+                <div className="inner-white-border">
+                  <img src={item.avatar} alt={item.username} className="story-avatar-img" />
+                </div>
+              </div>
+            )}
+            <span className="story-username-text">{item.username}</span>
+          </div>
+        ))}
+
+        {/* Scheduled Posts Trigger Button */}
         <div 
-          key={item.id} 
-          className="story-item"
-          onClick={() => onSelectStory(item)}
+          className="story-item scheduled-posts-trigger"
+          onClick={() => setShowScheduledModal(true)}
+          title="Manage Scheduled Posts"
+          style={{ cursor: 'pointer' }}
         >
-          {item.isUser ? (
-            <div className="your-story-container">
-              <img src={item.avatar} alt="Your story" className="story-avatar-img" />
-              <div className="add-plus-badge">
-                <Plus size={12} color="#ffffff" strokeWidth={3} />
-              </div>
+          <div className="insta-gradient-ring" style={{ background: 'linear-gradient(45deg, #f09433, #e6683c)' }}>
+            <div className="inner-white-border" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#262626' }}>
+              <Clock size={24} color="#ffffff" />
             </div>
-          ) : (
-            <div className="insta-gradient-ring">
-              <div className="inner-white-border">
-                <img src={item.avatar} alt={item.username} className="story-avatar-img" />
-              </div>
-            </div>
-          )}
-          <span className="story-username-text">{item.username}</span>
+          </div>
+          <span className="story-username-text">Scheduled</span>
         </div>
-      ))}
+      </div>
+
+      {/* Create / Schedule Post Modal */}
+      {showCreateModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: '520px' }}>
+            <button 
+              onClick={() => setShowCreateModal(false)}
+              style={{ position: 'absolute', top: '28px', right: '28px', background: 'none', border: 'none', color: '#fff', fontSize: '20px', cursor: 'pointer', zIndex: 1001 }}
+            >
+              ✕
+            </button>
+            <CreateStory 
+              userId={userId} 
+              onPostCreated={() => setShowCreateModal(false)} 
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Scheduled Posts View Modal */}
+      {showScheduledModal && (
+        <ScheduledPostsModal 
+          userId={userId} 
+          onClose={() => setShowScheduledModal(false)} 
+        />
+      )}
     </div>
   );
 }
