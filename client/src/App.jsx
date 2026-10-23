@@ -1,116 +1,165 @@
 import React, { useState } from 'react';
-import { Plus, Heart, Home, Clapperboard, Send, Search, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { Home, Search, Compass, Clapperboard, Send, Heart, PlusSquare, Menu, ShieldAlert, ShieldCheck } from 'lucide-react';
 import StoryTray from "./components/StoryTray";
 import StoryViewer from "./components/StoryViewer";
-import LanguageSettings from "./components/LanguageSettings";
+import Feed from "./components/Feed";
 import SubscriptionDashboard from "./components/SubscriptionDashboard";
-import LoginScreen from "./components/LoginScreen"; // Added Login Security Module
-import AdminDashboard from "./components/AdminDashboard"; // Added Admin Dashboard
+import LanguageSettings from "./components/LanguageSettings";
+import LoginScreen from "./components/LoginScreen";
+import AdminDashboard from "./components/AdminDashboard";
 import './App.css';
 
 function App() {
   const [activeStory, setActiveStory] = useState(null);
-  const [currentView, setCurrentView] = useState('feed'); // 'feed', 'security', or 'admin'
-  const adminId = 'admin_001'; // Pre-configured admin ID for testing the dashboard
+  const [currentView, setCurrentView] = useState('feed');
+  const adminId = 'admin_001';
 
   return (
-    <div className="app-container">
-      {/* Top Header */}
-      <header className="app-header">
-        <button className="icon-btn" aria-label="Create Post">
-          <Plus size={26} strokeWidth={1.8} color="#000000" />
-        </button>
+    <div className="insta-desktop-layout">
+      {/* Left Navigation Sidebar */}
+      <aside className="left-sidebar">
+        <div>
+          <div className="brand-logo">Instagram</div>
 
-        {/* Official Cursive Wordmark Data Image */}
-        <img 
-          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 103 29' width='103' height='29'><text x='0' y='23' font-family='Brush Script MT, cursive, sans-serif' font-size='27' fill='%23000000'>Instagram</text></svg>" 
-          alt="Instagram" 
-          className="insta-logo-image" 
-        />
+          <nav className="nav-links">
+            <button className={`nav-item ${currentView === 'feed' ? 'active' : ''}`} onClick={() => setCurrentView('feed')}>
+              <Home size={24} color="#000000" />
+              <span>Home</span>
+            </button>
+            <button className="nav-item">
+              <Search size={24} color="#000000" />
+              <span>Search</span>
+            </button>
+            <button className="nav-item">
+              <Compass size={24} color="#000000" />
+              <span>Explore</span>
+            </button>
+            <button className="nav-item">
+              <Clapperboard size={24} color="#000000" />
+              <span>Reels</span>
+            </button>
+            <button className="nav-item">
+              <Send size={24} color="#000000" />
+              <span>Messages</span>
+            </button>
+            <button className="nav-item">
+              <Heart size={24} color="#000000" />
+              <span>Notifications</span>
+              <span className="badge-count">2</span>
+            </button>
+            <button className="nav-item">
+              <PlusSquare size={24} color="#000000" />
+              <span>Create</span>
+            </button>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {/* Admin Control Panel Toggle Button */}
-          <button 
-            className="icon-btn" 
-            aria-label="Admin Dashboard"
-            onClick={() => setCurrentView(currentView === 'admin' ? 'feed' : 'admin')}
-            title="Toggle Admin Control Panel"
-          >
-            <ShieldAlert size={26} strokeWidth={1.8} color={currentView === 'admin' ? '#ff4d4f' : '#000000'} />
-          </button>
+            <button className="nav-item" onClick={() => setCurrentView(currentView === 'admin' ? 'feed' : 'admin')}>
+              <ShieldAlert size={24} color={currentView === 'admin' ? '#ff4d4f' : '#000000'} />
+              <span>Admin Panel</span>
+            </button>
 
-          {/* Security Portal Toggle Button */}
-          <button 
-            className="icon-btn" 
-            aria-label="Security Portal"
-            onClick={() => setCurrentView(currentView === 'security' ? 'feed' : 'security')}
-            title="Toggle Security Portal"
-          >
-            <ShieldCheck size={26} strokeWidth={1.8} color={currentView === 'security' ? '#4f46e5' : '#000000'} />
+            <button className="nav-item" onClick={() => setCurrentView('security')}>
+              <ShieldCheck size={24} color="#0095f6" />
+              <span>Security / Login</span>
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <button className="nav-item">
+            <Menu size={24} color="#000000" />
+            <span>More</span>
           </button>
         </div>
-      </header>
+      </aside>
 
-      {/* Main Content Area: Switch between Feed, Security Portal, and Admin Dashboard */}
-      <main className="main-content">
+      {/* Main Container */}
+      <div className="feed-wrapper">
+        <div className="center-feed">
+          {currentView === 'feed' && (
+            <>
+              {/* Story Bar */}
+              <section className="stories-section">
+                <StoryTray onSelectStory={(story) => setActiveStory(story)} />
+              </section>
+
+              {/* Feed Posts */}
+              <section className="feed-section">
+                <Feed />
+              </section>
+
+              {/* Extras (Subscriptions & Language Settings) */}
+              <section style={{ margin: '40px 0' }}>
+                <SubscriptionDashboard />
+              </section>
+              <section style={{ margin: '20px 0' }}>
+                <LanguageSettings />
+              </section>
+            </>
+          )}
+
+          {currentView === 'security' && <LoginScreen />}
+
+          {currentView === 'admin' && (
+            <AdminDashboard adminId={adminId} onLogout={() => setCurrentView('security')} />
+          )}
+        </div>
+
+        {/* Right Sidebar Suggestions (Feed View Only) */}
         {currentView === 'feed' && (
-          <>
-            <section className="stories-section">
-              <StoryTray onSelectStory={(story) => setActiveStory(story)} />
-            </section>
+          <aside className="right-sidebar">
+            <div className="user-profile-badge">
+              <div className="profile-info">
+                <img 
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
+                  alt="Profile" 
+                  className="profile-avatar" 
+                />
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: '14px', color: '#000000' }}>harshveena06</div>
+                  <div style={{ color: '#737373', fontSize: '12px' }}>HarshVeena Soni</div>
+                </div>
+              </div>
+              <button className="switch-btn">Switch</button>
+            </div>
 
-            <div className="feed-divider"></div>
+            <div>
+              <div className="suggestions-header">
+                <span>Suggested for you</span>
+                <button className="see-all-btn">See all</button>
+              </div>
 
-            {/* Subscription Dashboard Component */}
-            <section className="subscription-section" style={{ margin: '20px 0' }}>
-              <SubscriptionDashboard />
-            </section>
+              <div className="suggestion-item">
+                <div className="suggestion-info">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" alt="Avatar" className="suggestion-avatar" />
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '13px', color: '#000000' }}>Meggie</div>
+                    <div style={{ color: '#737373', fontSize: '11px' }}>Followed by monikas_83</div>
+                  </div>
+                </div>
+                <button className="follow-btn">Follow</button>
+              </div>
 
-            {/* Language Settings Component */}
-            <section className="settings-section" style={{ margin: '20px 0' }}>
-              <LanguageSettings />
-            </section>
-          </>
+              <div className="suggestion-item">
+                <div className="suggestion-info">
+                  <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80" alt="Avatar" className="suggestion-avatar" />
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '13px', color: '#000000' }}>Tanisha Dewangan</div>
+                    <div style={{ color: '#737373', fontSize: '11px' }}>Followed by naina_chelani</div>
+                  </div>
+                </div>
+                <button className="follow-btn">Follow</button>
+              </div>
+            </div>
+
+            <footer className="footer-links">
+              About · Help · Press · API · Jobs · Privacy · Terms · Locations · Language
+              <div style={{ marginTop: '12px' }}>© 2026 INSTAGRAM FROM META</div>
+            </footer>
+          </aside>
         )}
+      </div>
 
-        {currentView === 'security' && (
-          <section className="security-section" style={{ paddingBottom: '70px' }}>
-            <LoginScreen />
-          </section>
-        )}
-
-        {currentView === 'admin' && (
-          <section className="admin-section" style={{ paddingBottom: '70px' }}>
-            <AdminDashboard adminId={adminId} onLogout={() => setCurrentView('feed')} />
-          </section>
-        )}
-      </main>
-
-      {/* Bottom Navigation */}
-      <nav className="bottom-nav">
-        <button 
-          className={`nav-btn ${currentView === 'feed' ? 'active' : ''}`}
-          onClick={() => setCurrentView('feed')}
-        >
-          <Home size={26} color="#000000" strokeWidth={2.2} />
-        </button>
-        <button className="nav-btn"><Clapperboard size={24} color="#000000" strokeWidth={1.8} /></button>
-        <button className="nav-btn"><Send size={24} color="#000000" strokeWidth={1.8} /></button>
-        <button className="nav-btn"><Search size={26} color="#000000" strokeWidth={2} /></button>
-        <button 
-          className={`nav-btn profile-nav-btn ${currentView === 'security' ? 'ring-2 ring-indigo-600 rounded-full' : ''}`}
-          onClick={() => setCurrentView('security')}
-          title="Open Security & Login History"
-        >
-          <img 
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-            alt="Profile & Security" 
-            className="nav-profile-img" 
-          />
-        </button>
-      </nav>
-
-      {/* Story Modal */}
+      {/* Story Viewer Modal */}
       {activeStory && (
         <StoryViewer story={activeStory} onClose={() => setActiveStory(null)} />
       )}

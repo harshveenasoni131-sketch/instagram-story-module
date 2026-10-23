@@ -1,0 +1,296 @@
+/* Page Wrapper - Full Viewport Centering */
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  padding: 30px 20px 20px;
+  box-sizing: border-box;
+}
+
+/* Side-by-side Layout Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  max-width: 935px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* --- LEFT: Phone Mockup Frame --- */
+.phone-mockup {
+  width: 380px;
+  height: 580px;
+  background: #ffffff;
+  border-radius: 40px;
+  border: 12px solid #ffffff;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.phone-screen {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+}
+
+.phone-header {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 0 4px;
+  color: #000;
+}
+
+.phone-brand {
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.phone-stories {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.story-ring {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.avatar-demo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.phone-feed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.feed-card {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.feed-card.demo-1 { 
+  height: 180px; 
+  background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&auto=format&fit=crop&q=80') center/cover no-repeat; 
+}
+.feed-card.demo-2 { 
+  height: 160px; 
+  background: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&auto=format&fit=crop&q=80') center/cover no-repeat; 
+}
+
+/* --- RIGHT: Login Form Container --- */
+.login-form-wrapper {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-box, .signup-box {
+  background: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  padding: 24px 40px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.logo-title {
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  font-size: 42px;
+  margin: 10px 0 24px;
+  font-weight: normal;
+  color: #000;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px 8px;
+  background: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #a8a8a8;
+}
+
+.btn-login {
+  width: 100%;
+  background: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.btn-login:hover {
+  background: #1877f2;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 18px 0;
+}
+
+.divider .line {
+  flex: 1;
+  height: 1px;
+  background: #dbdbdb;
+}
+
+.divider .or {
+  color: #8e8e8e;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 18px;
+}
+
+.btn-fb {
+  background: none;
+  border: none;
+  color: #385185;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.fb-icon {
+  background: #385185;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 2px;
+  padding: 0 5px;
+  font-style: normal;
+}
+
+.forgot-pass {
+  display: block;
+  color: #00376b;
+  font-size: 12px;
+  margin-top: 14px;
+  text-decoration: none;
+}
+
+.signup-box p {
+  font-size: 14px;
+  color: #262626;
+  margin: 0;
+}
+
+.signup-box a {
+  color: #0095f6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-download {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.app-download p {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #262626;
+}
+
+.store-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.store-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #a8a8a8;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+  line-height: 1.1;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.store-btn svg {
+  flex-shrink: 0;
+  fill: #ffffff;
+}
+
+/* Footer links */
+.footer-links {
+  text-align: center;
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-top: 30px;
+}
+
+.footer-links .links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.footer-links span {
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .phone-mockup {
+    display: none;
+  }
+}
