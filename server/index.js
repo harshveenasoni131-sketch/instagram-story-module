@@ -142,9 +142,7 @@ if (!user) {
     isVerified: true,
     subscription: { plan: "free", postsUsed: 0, status: "active" }
   };
- // Line 145:
 usersDB.set(userId, user);
-
 
 const userPlanKey = user.subscription.plan || 'free';
 const planDetails = PLANS[userPlanKey];
@@ -155,10 +153,6 @@ if (user.subscription.postsUsed >= planDetails.postLimit) {
     message: `Posting limit reached for your ${planDetails.name}. Please upgrade your subscription to post more stories.`
   });
 }
-
-// ... rest of your route code ...
-}
-
 const newStory = {
   _id: `story_${Date.now()}`,
   user: userId,
