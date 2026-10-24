@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const nodemailer = require('nodemailer');
-const UAParser = require('ua-parser-js');
+import express from 'express';
+import cors from 'cors';
+import nodemailer from 'nodemailer';
+import UAParser from 'ua-parser-js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 // --- IN-MEMORY DATABASES ---
 let storiesDB = [];
