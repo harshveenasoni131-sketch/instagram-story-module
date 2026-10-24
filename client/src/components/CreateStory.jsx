@@ -42,3 +42,4 @@ const handleSubmit = async (e) => {
     alert("Network error. Please check your connection.");
   }
 };
+export default CreateStory;
