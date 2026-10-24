@@ -1023,4 +1023,4 @@ app.post('/api/scheduled-posts/schedule', async (req, res) => {
 });
 
 // --- EXPORT FOR VERCEL ---
-module.exports = app;
+export default app;
