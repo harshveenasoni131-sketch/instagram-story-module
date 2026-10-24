@@ -3,7 +3,6 @@ import { Calendar, Clock, AlertCircle, CheckCircle, Upload, Image as ImageIcon }
 
 const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
   const [imageUrl, setImageUrl] = useState('');
-  const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [caption, setCaption] = useState('');
   const [isScheduled, setIsScheduled] = useState(false);
@@ -12,14 +11,16 @@ const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Handle local file selection
+  // Handle local file selection and convert to Base64 (Vercel compatible)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file);
-      const localPreview = URL.createObjectURL(file);
-      setPreviewUrl(localPreview);
-      setImageUrl(localPreview); // Used for testing preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result); // Base64 preview
+        setImageUrl(reader.result);   // Base64 payload string
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -28,7 +29,7 @@ const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
     setError('');
     setSuccess('');
 
-    const finalImage = previewUrl || imageUrl;
+    const finalImage = imageUrl;
 
     if (!finalImage) {
       setError('Please select an image file or provide an image URL.');
@@ -50,9 +51,10 @@ const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
     setLoading(true);
 
     try {
+      // Use your live production backend URL instead of localhost
       const endpoint = isScheduled 
-        ? 'http://localhost:5000/api/scheduled-posts/schedule'
-        : 'http://localhost:5000/api/stories';
+        ? 'https://instagram-story-module-ozxc.vercel.app/api/scheduled-posts/schedule'
+        : 'https://instagram-story-module-ozxc.vercel.app/api/stories';
 
       const payload = isScheduled ? {
         userId,
@@ -79,7 +81,6 @@ const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
 
       setSuccess(isScheduled ? 'Post scheduled successfully!' : 'Story published successfully!');
       setImageUrl('');
-      setImageFile(null);
       setPreviewUrl('');
       setCaption('');
       setScheduledFor('');
@@ -125,7 +126,7 @@ const CreateStory = ({ userId = 'user_123', onPostCreated }) => {
             htmlFor="file-upload-input" 
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px', background: '#222', border: '1px dashed #555', borderRadius: '6px', cursor: 'pointer', textAlign: 'center' }}
           >
-            <Upload size={18} /> {imageFile ? imageFile.name : 'Select Image from Device'}
+            <Upload size={18} /> {previewUrl ? 'Image Selected ✓' : 'Select Image from Device'}
           </label>
         </div>
 
