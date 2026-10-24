@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Clock } from 'lucide-react';
 import CreateStory from './CreateStory';
-import ScheduledPostsModal from "./ScheduledPostModal";
+import ScheduledPostsModal from './ScheduledPostModal';
 import './StoryTray.css';
 
 const storiesData = [
@@ -39,7 +39,6 @@ function StoryTray({ onSelectStory, userId = 'user_123' }) {
 
   const handleStoryClick = (item) => {
     if (item.isUser) {
-      // Open Create / Schedule Story modal when clicking 'Your story'
       setShowCreateModal(true);
     } else if (onSelectStory) {
       onSelectStory(item);
