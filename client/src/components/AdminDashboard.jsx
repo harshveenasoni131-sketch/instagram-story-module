@@ -15,7 +15,7 @@ export default function AdminDashboard({ adminId, onLogout }) {
   // Fetch Stats
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/stats', {
+      const res = await fetch('https://instagram-story-module.vercel.app/api/admin/stats', {
         headers: { 'x-admin-id': adminId }
       });
       const data = await res.json();
@@ -29,7 +29,7 @@ export default function AdminDashboard({ adminId, onLogout }) {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/api/admin/users?search=${search}&status=${statusFilter}&plan=${planFilter}`;
+      let url = `https://instagram-story-module.vercel.app/api/admin/users?search=${search}&status=${statusFilter}&plan=${planFilter}`;
       const res = await fetch(url, {
         headers: { 'x-admin-id': adminId }
       });
@@ -45,7 +45,7 @@ export default function AdminDashboard({ adminId, onLogout }) {
   // Fetch Audit Logs
   const fetchAuditLogs = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/audit-logs', {
+      const res = await fetch('https://instagram-story-module.vercel.app/api/admin/audit-logs', {
         headers: { 'x-admin-id': adminId }
       });
       const data = await res.json();
@@ -65,7 +65,7 @@ export default function AdminDashboard({ adminId, onLogout }) {
   const handleDeleteUser = async (userId) => {
     if (!window.confirm(`Are you sure you want to delete user ${userId}?`)) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const res = await fetch(`https://instagram-story-module.vercel.app/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: { 'x-admin-id': adminId }
       });

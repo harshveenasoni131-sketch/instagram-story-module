@@ -99,7 +99,7 @@ export default function LanguageSettings() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/language/request-change', {
+      const response = await fetch('https://instagram-story-module.vercel.app/api/language/request-change', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: 'user_123', language: selectedLanguage })
@@ -126,7 +126,7 @@ export default function LanguageSettings() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/language/verify-otp', {
+      const response = await fetch('https://instagram-story-module.vercel.app/api/language/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: 'user_123', otp: otp, newLanguage: selectedLanguage })

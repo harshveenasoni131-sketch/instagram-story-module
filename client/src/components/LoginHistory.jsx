@@ -6,7 +6,7 @@ export default function LoginHistory({ userId = 'user_123' }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/user/login-history/${userId}`)
+    fetch(`https://instagram-story-module.vercel.app/api/user/login-history/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch login history');
         return res.json();

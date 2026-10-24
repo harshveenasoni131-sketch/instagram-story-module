@@ -9,7 +9,7 @@ const ScheduledPostsModal = ({ userId = 'user_123', onClose }) => {
   const fetchScheduledPosts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/scheduled-posts/user/${userId}`);
+      const res = await fetch(`https://instagram-story-module.vercel.app/api/scheduled-posts/user/${userId}`);
       const data = await res.json();
       if (data.success) {
         setScheduledPosts(data.data);
@@ -29,7 +29,7 @@ const ScheduledPostsModal = ({ userId = 'user_123', onClose }) => {
     if (!window.confirm('Are you sure you want to cancel this scheduled post?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/scheduled-posts/${postId}/cancel`, {
+      const res = await fetch(`https://instagram-story-module.vercel.app/api/scheduled-posts/${postId}/cancel`, {
         method: 'PATCH'
       });
       const data = await res.json();

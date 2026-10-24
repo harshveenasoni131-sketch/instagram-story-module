@@ -18,7 +18,7 @@ export default function LoginScreen() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('https://instagram-story-module.vercel.app/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -49,7 +49,7 @@ export default function LoginScreen() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/verify-chrome-otp', {
+      const response = await fetch('https://instagram-story-module.vercel.app/api/auth/verify-chrome-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, otp }),
