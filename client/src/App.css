@@ -199,3 +199,44 @@ body {
   color: #c7c7c7;
   line-height: 1.6;
 }
+
+/* =========================================
+   MOBILE RESPONSIVENESS FIXES (< 768px)
+   ========================================= */
+@media (max-width: 768px) {
+  .left-sidebar {
+    display: none !important;
+  }
+
+  .feed-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-bottom: 70px; /* Space for mobile nav bar */
+  }
+
+  .center-feed {
+    padding: 0 8px;
+  }
+
+  /* Mobile Bottom Navigation Bar Styles */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #dbdbdb;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 0;
+    z-index: 1000;
+  }
+
+  .mobile-bottom-nav button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+}

@@ -12,12 +12,13 @@ import './App.css';
 function App() {
   const [activeStory, setActiveStory] = useState(null);
   const [currentView, setCurrentView] = useState('feed');
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const adminId = 'admin_001';
 
   return (
     <div className="insta-desktop-layout">
-      {/* Left Navigation Sidebar */}
-      <aside className="left-sidebar">
+      {/* Left Navigation Sidebar (Hidden on mobile screens via CSS) */}
+      <aside className="left-sidebar hidden md:flex">
         <div>
           <div className="brand-logo">Instagram</div>
 
@@ -65,12 +66,31 @@ function App() {
         </div>
 
         <div>
-          <button className="nav-item">
+          <button className="nav-item" onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}>
             <Menu size={24} color="#000000" />
             <span>More</span>
           </button>
         </div>
       </aside>
+
+      {/* Mobile Bottom Navigation Bar (Only visible on mobile screens) */}
+      <div className="mobile-bottom-nav md:hidden">
+        <button onClick={() => setCurrentView('feed')} className={currentView === 'feed' ? 'active' : ''}>
+          <Home size={24} color="#000000" />
+        </button>
+        <button onClick={() => setCurrentView('feed')}>
+          <Search size={24} color="#000000" />
+        </button>
+        <button onClick={() => setCurrentView('feed')}>
+          <PlusSquare size={24} color="#000000" />
+        </button>
+        <button onClick={() => setCurrentView('admin')} className={currentView === 'admin' ? 'active' : ''}>
+          <ShieldAlert size={24} color={currentView === 'admin' ? '#ff4d4f' : '#000000'} />
+        </button>
+        <button onClick={() => setCurrentView('security')} className={currentView === 'security' ? 'active' : ''}>
+          <ShieldCheck size={24} color="#0095f6" />
+        </button>
+      </div>
 
       {/* Main Container */}
       <div className="feed-wrapper">
