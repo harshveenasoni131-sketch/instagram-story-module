@@ -6,8 +6,8 @@ A fully responsive, full-stack Instagram Clone featuring real-time story creatio
 
 ## 🚀 Live Demo & Deployment Links
 
-* **Frontend Application:** [https://instagram-story-module.vercel.app](https://instagram-story-module.vercel.app)
-* **Backend API Gateway:** [https://instagram-story-module-ozxc.vercel.app](https://instagram-story-module-ozxc.vercel.app)
+* **Frontend Application:** [https://http://localhost:5000/api](https://http://localhost:5000/api)
+* **Backend API Gateway:** [https://http://localhost:5000](https://http://localhost:5000)
 
 ---
 

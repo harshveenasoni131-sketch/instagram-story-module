@@ -1,11 +1,11 @@
 ### 1. Test Admin Dashboard Statistics
-GET https://instagram-story-module.vercel.app/api/admin/stats
+GET https://http://localhost:5000/api/api/admin/stats
 x-admin-id: admin_001
 
 ### 2. Test Admin User Management Search & Filters
-GET https://instagram-story-module.vercel.app/api/admin/users?status=active
+GET https://http://localhost:5000/api/api/admin/users?status=active
 x-admin-id: admin_001
 
 ### 3. Test Fetching Admin Audit Logs
-GET https://instagram-story-module.vercel.app/api/admin/audit-logs
+GET https://http://localhost:5000/api/api/admin/audit-logs
 x-admin-id: admin_001

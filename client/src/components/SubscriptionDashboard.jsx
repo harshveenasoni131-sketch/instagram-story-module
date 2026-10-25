@@ -29,7 +29,7 @@ export default function SubscriptionDashboard() {
 
   // Fetch current subscription status on load
   useEffect(() => {
-    fetch(`https://instagram-story-module.vercel.app/api/subscriptions/status/${userId}`)
+    fetch(`https://http://localhost:5000/api/api/subscriptions/status/${userId}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -67,7 +67,7 @@ export default function SubscriptionDashboard() {
     setInvoice(null);
 
     try {
-      const response = await fetch('https://instagram-story-module.vercel.app/api/subscriptions/upgrade', {
+      const response = await fetch('https://http://localhost:5000/api/api/subscriptions/upgrade', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

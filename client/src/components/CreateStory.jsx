@@ -32,7 +32,7 @@ const CreateStory = ({ userId = "user_123", onPostCreated = () => {} }) => {
     };
 
     try {
-      const response = await fetch("https://instagram-story-module-ozxc.vercel.app/api/stories", {
+      const response = await fetch("http://localhost:5000/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -59,7 +59,7 @@ const CreateStory = ({ userId = "user_123", onPostCreated = () => {} }) => {
           type="text"
           placeholder="Write a caption..."
           value={caption}
-          onChange={(e) => setCaption(e.target.value)}
+          onChange={(e) => setCaption(e.value)}
         />
         <label>
           <input
