@@ -32,11 +32,11 @@ const CreateStory = ({ userId = "user_123", onPostCreated = () => {} }) => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/stories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+      const response = await fetch(`${API_BASE_URL}/api/stories`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+});
 
       if (response.ok) {
         alert(isScheduled ? "Story scheduled successfully!" : "Story posted successfully!");
@@ -84,3 +84,4 @@ const CreateStory = ({ userId = "user_123", onPostCreated = () => {} }) => {
 };
 
 export default CreateStory;
+import { API_BASE_URL } from "../config";

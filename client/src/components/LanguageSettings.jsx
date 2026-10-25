@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LanguageSettings.css';
+import { API_BASE_URL } from "../config";
 
 export default function LanguageSettings() {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
@@ -99,11 +100,11 @@ export default function LanguageSettings() {
     setMessage('');
 
     try {
-      const response = await fetch('https://http://localhost:5000/api/api/language/request-change', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'user_123', language: selectedLanguage })
-      });
+      const response = await fetch(`${API_BASE_URL}/api/language/request-change`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ userId: 'user_123', language: selectedLanguage })
+});
 
       const data = await response.json();
       if (data.success) {

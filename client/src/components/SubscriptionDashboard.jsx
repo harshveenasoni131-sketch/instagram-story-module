@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SubscriptionDashboard.css';
+import { API_BASE_URL } from "../config";
 
 const PLANS = {
   free: { name: 'Free Plan', price: '₹0', posts: '1 Post limit', postLimit: 1 },
@@ -29,7 +30,7 @@ export default function SubscriptionDashboard() {
 
   // Fetch current subscription status on load
   useEffect(() => {
-    fetch(`https://http://localhost:5000/api/api/subscriptions/status/${userId}`)
+    fetch(`${API_BASE_URL}/api/subscriptions/status/${userId}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
